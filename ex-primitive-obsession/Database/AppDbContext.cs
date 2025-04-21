@@ -12,10 +12,11 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<Book>().HasKey(b => b.Id);
 
         modelBuilder.Entity<Book>().Property(b => b.Id)
-            .HasConversion(bookId => bookId.Value, id => new BookId(id));
+            .HasConversion(bookId => bookId.Value, id => new BookId(id))
+            .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Book>().Property(b => b.Title)
-            .IsRequired().HasMaxLength(100);
+            .IsRequired();
 
         modelBuilder.Entity<Book>().Property(b => b.Culture)
             .HasConversion(new CultureInfoConverter());

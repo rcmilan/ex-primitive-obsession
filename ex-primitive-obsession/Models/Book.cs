@@ -10,7 +10,10 @@ public class Book
     public CultureInfo Culture { get; private set; }
 
     [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "EF Core requires a parameterless constructor for the entity")]
-    private Book(BookId id, string title, CultureInfo culture) => (Id, Title, Culture) = (id, title, culture);
+    private Book(BookId Id, string Title, CultureInfo Culture) => (this.Id, this.Title, this.Culture) = (Id, Title, Culture);
+
+    public static Book Create(string title, string culture) => new(default, title, CultureInfo.GetCultureInfo(culture, true));
+
 }
 
-public record BookId(int Value);
+public record struct BookId(int Value);
