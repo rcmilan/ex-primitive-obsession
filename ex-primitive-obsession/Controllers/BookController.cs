@@ -20,11 +20,14 @@ public class BookController : ControllerBase
         return Ok(new GetBookResponse(book.Id.Value, book.Title, book.Culture.Name));
     }
 
-    [HttpGet("all")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<GetBookResponse>>> GetAll([FromServices] AppDbContext dbContext)
     {
-        var books = await dbContext.Books.ToListAsync();
-        return Ok(books.Select(b => new GetBookResponse(b.Id.Value, b.Title, b.Culture.Name)));
+        var books = await dbContext.Books
+            .Select(b => new GetBookResponse(b.Id.Value, b.Title, b.Culture.Name))
+            .ToListAsync();
+
+        return Ok(books);
     }
 
     [HttpPost]
@@ -36,6 +39,6 @@ public class BookController : ControllerBase
 
         await dbContext.SaveChangesAsync();
 
-        return Created();
+        return Created("/", newBook.Id);
     }
 }
