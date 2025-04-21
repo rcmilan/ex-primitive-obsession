@@ -1,4 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
+using ex_primitive_obsession.Database;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 namespace ex_primitive_obsession
@@ -13,6 +14,12 @@ namespace ex_primitive_obsession
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                options.UseNpgsql(connectionString);
+            });
 
             var app = builder.Build();
 
